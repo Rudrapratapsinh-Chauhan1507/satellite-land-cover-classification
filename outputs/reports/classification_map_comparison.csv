@@ -1,0 +1,6 @@
+class_id,class_name,random_forest_pixels,extra_trees_pixels,difference_pixels
+1,vegetation,83751,80946,-2805
+2,built_up,14656,26633,11977
+3,bare_soil,27500,20600,-6900
+4,water,1635,1561,-74
+5,road,10835,8637,-2198
