@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "study_area",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{"type":"Feature","properties":{"fid":1,"name":"Ahmedabad_Gandhinagar_AOI"},"geometry":{"type":"Polygon","coordinates":[[[72.55744464459157,23.180327967958828,0.0],[72.557549811598548,23.156156552873636,0.0],[72.608135141956424,23.155963163960344,0.0],[72.607977391445957,23.18013461395617,0.0],[72.55744464459157,23.180327967958828,0.0]]]}}
+]
+}

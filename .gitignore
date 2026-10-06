@@ -1,0 +1,62 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# IDE and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Large raw satellite imagery
+data/raw/
+
+# Generated intermediate imagery and feature arrays
+data/processed/
+outputs/indices/
+outputs/training_indices/
+outputs/training/*.npz
+outputs/training/valid_pixel_mask.tif
+
+# Generated model and classification artifacts
+# Uncomment these if you decide not to publish them:
+# outputs/models/*.joblib
+# outputs/classification/*.tif
+
+# Keep selected project outputs available for documentation.
+# Do not ignore all of outputs/ or data/ globally.
+# GIS sidecar and temporary virtual raster files
+*.aux.xml
+*.vrt
+
+# Experimental Dynamic World investigation outputs
+outputs/training/dynamic_world_candidates.gpkg
+outputs/training/dynamic_world_candidates_cleaned.csv
+outputs/reports/dynamic_world_samples_inspected.csv
+outputs/reports/dynamic_world_candidate_predictions.csv
+outputs/reports/dynamic_world_prediction_crosstab.csv
+outputs/reports/training_samples_inspection.gpkg
+
+# Local QGIS helper project
+data/aoi/QGIS_SAMPLE.qgz
