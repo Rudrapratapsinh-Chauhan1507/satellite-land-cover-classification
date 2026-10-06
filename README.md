@@ -279,8 +279,11 @@ The current workflow generates or uses the following artifacts:
 | Baseline land-cover map | `outputs/classification/land_cover_baseline.tif` |
 | Classification visualization | `outputs/figures/land_cover_classification.png` |
 | Training sample distribution | `outputs/figures/training_sample_distribution.png` |
+| Classification map comparison | `outputs/reports/classification_map_comparison.csv` |
+| Spatial cross-validation results | `outputs/reports/spatial_cross_validation_folds.csv` |
 
 The classification raster is a georeferenced GeoTIFF with a 10-metre pixel resolution and EPSG:32642 CRS.
+The classification map comparison report summarizes predicted pixel counts for each class across the Random Forest and Extra Trees maps. The spatial cross-validation report records fold-level performance and missing classes. These spatial validation results are exploratory because some folds lack classes in their training or test sets; they should not be interpreted as definitive accuracy estimates.
 
 ## Limitations and Future Improvements
 
