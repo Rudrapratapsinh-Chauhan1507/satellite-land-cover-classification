@@ -211,6 +211,14 @@ The cross-validation confusion matrix shows that built-up and bare-soil samples 
 
 **Evaluation limitation:** These metrics are preliminary. They are based on only 39 labelled samples and three-fold stratified cross-validation. They should not be interpreted as independently verified accuracy for the entire classification map. Spatially independent validation and a larger, more representative dataset are needed for a stronger assessment.
 
+### Exploratory Dynamic World Comparison
+
+A set of 400 candidate points derived from Dynamic World labels was used for exploratory comparison with the Extra Trees classification map. The points represent four Dynamic World categories: Trees, Grass, Flooded vegetation, and Crops, with 100 candidates per category.
+
+The model produced predictions for 394 points; 6 points fell on NoData pixels. The resulting predictions are exploratory only. Dynamic World categories do not map directly to the project's five land-cover classes, and the candidate labels have not been independently verified as ground truth. Therefore, this comparison is not reported as an accuracy assessment.
+
+The analysis is intended to help identify areas for further inspection and potential reference-data collection.
+
 ## Visual Results
 
 ### Land-cover classification
