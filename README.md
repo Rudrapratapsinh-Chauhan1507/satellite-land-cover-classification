@@ -211,6 +211,20 @@ The cross-validation confusion matrix shows that built-up and bare-soil samples 
 
 **Evaluation limitation:** These metrics are preliminary. They are based on only 39 labelled samples and three-fold stratified cross-validation. They should not be interpreted as independently verified accuracy for the entire classification map. Spatially independent validation and a larger, more representative dataset are needed for a stronger assessment.
 
+## Visual Results
+
+### Land-cover classification
+
+![Land-cover classification map](outputs/figures/land_cover_classification.png)
+
+The classification visualization displays the five mapped classes: vegetation, built-up, bare soil, water, and road. White gaps may represent unclassified or NoData pixels; their meaning should be confirmed against the classification raster before interpretation.
+
+### Training sample distribution
+
+![Training sample distribution](outputs/figures/training_sample_distribution.png)
+
+The training-sample map shows the geographic distribution of the 39 labelled samples used in the current workflow. The limited sample size and uneven distribution across classes are important considerations when interpreting the model results.
+
 ## Installation
 
 ### Prerequisites
@@ -263,6 +277,8 @@ The current workflow generates or uses the following artifacts:
 | Whole-image valid-pixel mask | `outputs/training/valid_pixel_mask.tif` |
 | Random Forest baseline model | `outputs/models/random_forest_baseline.joblib` |
 | Baseline land-cover map | `outputs/classification/land_cover_baseline.tif` |
+| Classification visualization | `outputs/figures/land_cover_classification.png` |
+| Training sample distribution | `outputs/figures/training_sample_distribution.png` |
 
 The classification raster is a georeferenced GeoTIFF with a 10-metre pixel resolution and EPSG:32642 CRS.
 
