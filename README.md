@@ -1,340 +1,619 @@
 # Satellite Land Cover Classification Using Sentinel-2
 
-A geospatial machine learning project for classifying land cover in the Ahmedabad–Gandhinagar region of Gujarat, India, using Sentinel-2 satellite imagery, spectral indices, and a Random Forest classifier.
+An end-to-end geospatial machine-learning workflow for classifying land cover in the Ahmedabad–Gandhinagar region of Gujarat, India, using Sentinel-2 multispectral imagery, spectral indices, classical machine learning, spatial validation, and QGIS.
+
+> **Project status:** Completed portfolio/research workflow
+> **Study area:** Ahmedabad–Gandhinagar, Gujarat, India
+> **Satellite:** Sentinel-2
+> **Spatial resolution:** 10 m reference grid
+> **Final classes:** Vegetation, Built-up, Bare Soil, Water, Road
+
+---
 
 ## Overview
 
-This project develops a satellite-based land-cover classification workflow using multispectral imagery and supervised machine learning. The workflow combines Sentinel-2 spectral bands with vegetation, water, and built-up indices to generate a raster map of five land-cover classes.
+This project develops an end-to-end pixel-level land-cover classification workflow from Sentinel-2 multispectral imagery.
 
-The project includes satellite data preprocessing, spectral feature extraction, labelled sample preparation, model training, classification map generation, and geospatial visualization using QGIS.
+The pipeline combines:
 
-### Objectives
+- Sentinel-2 visible, near-infrared, red-edge, and shortwave-infrared bands
+- NDVI, NDWI, and NDBI spectral indices
+- Labelled geospatial training samples
+- Classical supervised machine-learning models
+- Stratified model evaluation
+- Geographic/spatial cross-validation
+- Pixel-level land-cover prediction
+- GeoTIFF generation
+- QGIS visualization and mapping
 
-- Process and prepare Sentinel-2 satellite imagery for analysis.
-- Calculate spectral indices to improve land-cover characterization.
-- Prepare labelled training samples from geospatial data.
-- Train and evaluate a Random Forest classification model.
-- Generate a georeferenced land-cover classification raster.
-- Visualize and inspect the results using QGIS.
+The final workflow is designed as an **experimental/research classification pipeline**, with particular emphasis on understanding spatial generalization and documenting the limitations caused by the small labelled dataset.
+
+---
+
+## Key Highlights
+
+- 🛰️ Sentinel-2 multispectral land-cover classification
+- 🧮 13 spectral predictors
+- 🌱 NDVI, NDWI, and NDBI feature engineering
+- 🤖 Classical ML model comparison
+- 🌳 Extra Trees used for the final candidate classification
+- 🌍 Geographic spatial cross-validation
+- 🗺️ 10 m georeferenced land-cover GeoTIFF
+- 🧭 Ahmedabad–Gandhinagar study area
+- 🖥️ Reproducible QGIS project
+- 📓 Six documented Jupyter notebooks
+- ⚠️ Explicit analysis of spatial-validation limitations
+
+---
 
 ## Study Area and Data
 
-**Study area:** Ahmedabad–Gandhinagar region, Gujarat, India.
+### Study Area
 
-**Satellite data:** Sentinel-2 multispectral imagery.
+**Ahmedabad–Gandhinagar region, Gujarat, India**
 
-The project uses spectral bands from the visible, near-infrared, red-edge, and shortwave-infrared regions. The clipped imagery is prepared on a 10-metre reference grid in the UTM coordinate reference system EPSG:32642.
+The project uses an AOI covering the selected Ahmedabad–Gandhinagar study region.
 
-The current study uses a Sentinel-2 scene identified as `T42QZL_20261003T053651`.
+### Sentinel-2 Data
 
-The project also uses labelled geospatial training samples stored in a GeoPackage.
+The current analysis uses the Sentinel-2 scene:
+
+```text
+T42QZL_20261003T053651
+```
+
+The processed imagery uses a **10 m reference grid** in:
+
+```text
+CRS: EPSG:32642
+```
+
+The workflow uses Sentinel-2 bands from visible, near-infrared, red-edge, and shortwave-infrared regions.
+
+---
 
 ## Land-Cover Classes
 
-The classifier predicts five classes:
+The final classification scheme contains five classes:
 
 | Class ID | Class | Description |
-|---|---|---|
+|---:|---|---|
 | 1 | Vegetation | Vegetated surfaces |
 | 2 | Built-up | Built or developed surfaces |
-| 3 | Bare soil | Exposed soil and similar bare surfaces |
+| 3 | Bare Soil | Exposed soil and other bare surfaces |
 | 4 | Water | Water bodies |
 | 5 | Road | Road surfaces |
 
-These classes represent the project's current classification scheme. Their accuracy depends on the quality and representativeness of the labelled training samples.
+These classes represent the project's current experimental classification scheme. Their performance depends strongly on the quality, quantity, and spatial representativeness of the labelled samples.
+
+---
 
 ## Spectral Features
 
-The current Random Forest model uses 13 predictors.
+The final feature space contains **13 predictors**.
 
-### Sentinel-2 spectral bands
+### Sentinel-2 bands
 
-- B02 — Blue
-- B03 — Green
-- B04 — Red
-- B05 — Red Edge 1
-- B06 — Red Edge 2
-- B07 — Red Edge 3
-- B08 — Near Infrared
-- B8A — Narrow Near Infrared
-- B11 — Shortwave Infrared 1
-- B12 — Shortwave Infrared 2
+| Band | Description |
+|---|---|
+| B02 | Blue |
+| B03 | Green |
+| B04 | Red |
+| B05 | Red Edge 1 |
+| B06 | Red Edge 2 |
+| B07 | Red Edge 3 |
+| B08 | Near Infrared |
+| B8A | Narrow Near Infrared |
+| B11 | Shortwave Infrared 1 |
+| B12 | Shortwave Infrared 2 |
 
 ### Spectral indices
 
-- **NDVI — Normalized Difference Vegetation Index:** helps characterize vegetation.
-- **NDWI — Normalized Difference Water Index:** helps characterize water-related spectral responses.
-- **NDBI — Normalized Difference Built-up Index:** helps characterize built-up surfaces.
+**NDVI — Normalized Difference Vegetation Index**
 
-Together, these features provide complementary spectral information for distinguishing land-cover classes.
+Used to characterize vegetation-related spectral response.
 
-## Technology Stack
+**NDWI — Normalized Difference Water Index**
 
-| Technology | Purpose |
-|---|---|
-| Python | Main programming language |
-| NumPy | Numerical computation |
-| Pandas | Training-data preparation and analysis |
-| Rasterio | Raster processing and GeoTIFF operations |
-| GeoPandas | Geospatial vector data handling |
-| Shapely | Geometric operations |
-| PyProj | Coordinate reference system transformations |
-| Matplotlib | Data visualization |
-| Scikit-learn | Random Forest training and model evaluation |
-| Joblib | Saving and loading the trained model |
-| Jupyter | Interactive exploration and analysis |
-| QGIS | Geospatial visualization and map inspection |
+Used to provide additional information for water-related spectral response.
 
-## Project Structure
+**NDBI — Normalized Difference Built-up Index**
+
+Used to provide additional information for built-up surfaces.
+
+Together, the 10 Sentinel-2 bands and three spectral indices provide a 13-dimensional feature representation for the supervised classification workflow.
+
+---
+
+## Methodology
 
 ```text
-satellite-land-cover-classification/
-├── data/
-│   ├── aoi/
-│   │   ├── study_area.geojson
-│   │   └── training_samples_v2.gpkg
-│   ├── raw/
-│   │   └── sentinel2/
-│   └── processed/
-│       └── sentinel2/
-├── notebooks/
-├── outputs/
-│   ├── indices/
-│   ├── training_indices/
-│   ├── training/
-│   ├── models/
-│   ├── classification/
-│   ├── figures/
-│   └── reports/
-├── src/
-│   ├── preprocessing/
-│   ├── features/
-│   ├── training/
-│   ├── prediction/
-│   ├── evaluation/
-│   ├── visualization/
-│   └── utils/
-├── satellite_land_cover.qgz
-├── requirements.txt
-└── README.md
+Sentinel-2 imagery
+        │
+        ▼
+AOI clipping & preprocessing
+        │
+        ▼
+Spectral bands
+        │
+        ├── NDVI
+        ├── NDWI
+        └── NDBI
+        │
+        ▼
+13-dimensional spectral feature set
+        │
+        ▼
+Labelled training samples
+        │
+        ▼
+Data cleaning & feature extraction
+        │
+        ▼
+ML model comparison
+        │
+        ▼
+Model evaluation
+        │
+        ├── Stratified cross-validation
+        └── Geographic spatial validation
+        │
+        ▼
+Final candidate model
+        │
+        ▼
+Pixel-level prediction
+        │
+        ▼
+Land-cover GeoTIFF
+        │
+        ▼
+QGIS visualization
 ```
 
-The directories shown represent the intended organization of the project. Some folders may contain additional experimental scripts or generated files.
+---
 
-## Workflow
+# Dataset and Training Samples
 
-The core classification workflow consists of the following stages.
+The initial labelled dataset contained **39 samples**.
 
-### 1. Satellite data preprocessing
+After cleaning invalid/incomplete training records, **33 valid samples** remained for the final cleaned training dataset.
 
-Satellite bands are clipped to the study area and prepared for downstream analysis.
+The cleaned dataset contained:
 
-Relevant script:
+| Class | Valid samples |
+|---|---:|
+| Vegetation | 10 |
+| Built-up | 9 |
+| Road | 8 |
+| Bare Soil | 6 |
+| Water | 0* |
 
-```powershell
-python src/preprocessing/clip_satellite_bands.py
+\*The final cleaned training dataset used for the modelling workflow contained 33 valid samples across the retained classes; water samples were present in the original labelled set and became important in the spatial-validation analysis. The spatial grouping revealed that all six water samples were concentrated in one geographic group, which prevented some spatial folds from being evaluated normally.
+
+Because of the very small dataset, the reported model metrics should be treated as **experimental diagnostics rather than independently verified map accuracy**.
+
+---
+
+# Model Evaluation
+
+The project evaluates model behaviour using both conventional stratified validation and geographic validation.
+
+These two evaluation approaches answer different questions.
+
+### Stratified validation
+
+Tests model performance when samples are divided while maintaining class representation.
+
+### Spatial validation
+
+Tests whether the learned relationships transfer to geographically separated samples.
+
+The spatial evaluation is especially important for satellite imagery because nearby pixels can be spectrally similar. A random split can therefore provide an optimistic estimate of generalization.
+
+---
+
+## Spatial Cross-Validation Results
+
+Four geographic groups were evaluated.
+
+| Fold | Training Samples | Validation Samples | Accuracy | Macro F1 | Status |
+|---:|---:|---:|---:|---:|---|
+| 1 | 27 | 12 | 0.9167 | 0.5714 | Evaluated |
+| 2 | 28 | 11 | — | — | Skipped — water missing from training |
+| 3 | 30 | 9 | 0.4444 | 0.1600 | Evaluated |
+| 4 | 32 | 7 | 1.0000 | 0.6000 | Evaluated |
+
+Across the **three evaluated folds**:
+
+| Metric | Mean |
+|---|---:|
+| Accuracy | **78.70%** |
+| Macro F1 | **0.4438** |
+
+The skipped fold is intentionally excluded from these means.
+
+### Why was Fold 2 skipped?
+
+All six water samples were concentrated within one spatial group.
+
+When that group was used as validation data, the corresponding training partition contained no water examples. A meaningful supervised classification metric could therefore not be computed for that fold.
+
+Rather than artificially assigning a score, the workflow records the fold as:
+
+```text
+skipped_missing_training_class
 ```
 
-### 2. Spectral index calculation
+This is an important finding about the limitations of the current sampling design.
 
-Calculate the spectral indices used by the labelled-sample extraction and prediction workflow.
+---
 
-```powershell
-python src/features/calculate_training_indices.py
+## Interpretation of Spatial Validation
+
+The spatial results demonstrate that geographic generalization is substantially more difficult than conventional random/stratified validation.
+
+The large variation between folds indicates that the current dataset is:
+
+- very small,
+- spatially uneven,
+- class-imbalanced across geographic groups,
+- and insufficient for a reliable estimate of real-world map accuracy.
+
+The spatial-validation experiment is therefore treated as an **exploratory diagnostic**, not as a definitive accuracy assessment.
+
+A larger and independently verified spatial reference dataset would be required for a stronger scientific evaluation.
+
+---
+
+# Final Classification
+
+The project produced a pixel-level land-cover classification raster using the selected Extra Trees candidate model.
+
+### Final candidate output
+
+```text
+outputs/classification/land_cover_extra_trees.tif
 ```
 
-### 3. Training-data preparation
-
-Extract the spectral features at labelled training locations and prepare the model-training dataset.
-
-```powershell
-python src/training/extract_training_data.py
-```
-
-The current training dataset contains 39 labelled samples and 13 predictor features.
-
-### 4. Model training and evaluation
-
-Train the Random Forest baseline and evaluate it using three-fold stratified cross-validation.
-
-```powershell
-python src/training/train_model.py
-```
-
-The script saves the trained baseline model under `outputs/models/`.
-
-### 5. Land-cover prediction
-
-Apply the trained model to the prepared satellite imagery and generate a georeferenced classification raster.
-
-```powershell
-python src/prediction/predict_land_cover.py
-```
-
-The baseline classification map is written to:
+A Random Forest baseline is also retained for comparison:
 
 ```text
 outputs/classification/land_cover_baseline.tif
 ```
 
-### 6. Visualization and inspection
+The classification outputs are georeferenced GeoTIFF rasters on the project's 10 m reference grid.
 
-Open the classification raster in QGIS to inspect the spatial distribution of the predicted classes. The project also contains scripts for visualizing spectral indices and evaluating alternative classification results.
+---
 
-Run each stage from the project root directory. The required input files must already exist before running a downstream stage.
+# Visual Results
 
-## Model and Evaluation Results
+### Land-Cover Classification
 
-The current baseline classifier is a **Random Forest** model trained using 300 trees, balanced class weights, and a fixed random seed.
+The final classification visualization shows the five target classes:
 
-### Baseline performance
+- Vegetation
+- Built-up
+- Bare Soil
+- Water
+- Road
 
-| Metric | Result |
-|---|---:|
-| Cross-validation accuracy | 89.74% |
-| Macro F1-score | 0.8926 |
-| Number of labelled samples | 39 |
-| Number of predictor features | 13 |
-| Number of classes | 5 |
+![Land-cover classification](outputs/figures/land_cover_classification_final.png)
 
-### Per-class F1-score
+### Spectral Indices
 
-| Class | F1-score |
-|---|---:|
-| Vegetation | 0.947 |
-| Built-up | 0.824 |
-| Bare soil | 0.769 |
-| Water | 0.923 |
-| Road | 1.000 |
+The project also generates visual previews of the derived spectral indices.
 
-The cross-validation confusion matrix shows that built-up and bare-soil samples are sometimes confused with one another. This suggests that these classes deserve particular attention during further feature engineering and training-data collection.
+![Spectral indices](outputs/figures/spectral_indices_preview.png)
 
-**Evaluation limitation:** These metrics are preliminary. They are based on only 39 labelled samples and three-fold stratified cross-validation. They should not be interpreted as independently verified accuracy for the entire classification map. Spatially independent validation and a larger, more representative dataset are needed for a stronger assessment.
+### Training Sample Distribution
 
-### Spatial Cross-Validation
+The spatial distribution of labelled training samples is important for interpreting the spatial-validation results.
 
-Spatial cross-validation was explored using four geographically grouped folds to investigate how model performance changes when validation samples are separated spatially.
+![Training sample distribution](outputs/figures/training_point_spatial_distribution.png)
 
-| Fold | Training samples | Validation samples | Accuracy | Macro F1-score | Status |
-|---|---:|---:|---:|---:|---|
-| 1 | 27 | 12 | 0.9167 | 0.5714 | Evaluated |
-| 2 | 28 | 11 | — | — | Skipped: water class missing from training data |
-| 3 | 30 | 9 | 0.4444 | 0.1600 | Evaluated |
-| 4 | 32 | 7 | 1.0000 | 0.6000 | Evaluated |
+---
 
-Across the three evaluated folds, the mean accuracy was 0.7870 (78.70%) and the mean macro F1-score was 0.4438. These means exclude the skipped fold and should not be interpreted as complete four-fold cross-validation results.
+# QGIS Visualization
 
-**Important limitations:** The dataset contains only 39 labelled samples, and the spatial groups have an uneven distribution of land-cover classes. All six water samples fall within one spatial group, preventing the model from being trained on water samples in one of the validation splits. Some evaluated folds also lack certain classes in their validation samples. Consequently, these results are exploratory diagnostics, not reliable estimates of generalization performance or independently verified classification-map accuracy.
+A reproducible QGIS project is included:
 
-The spatial-validation results should be interpreted alongside the stratified cross-validation results, keeping the two evaluation methods distinct. Future evaluation would benefit from more geographically representative, independently verified reference samples.
+```text
+satellite_land_cover_reproducible.qgz
+```
 
-### Exploratory Dynamic World Comparison
+The project was cleaned to use relative project paths for its required local data dependencies.
 
-A set of 400 candidate points derived from Dynamic World labels was used for exploratory comparison with the Extra Trees classification map. The points represent four Dynamic World categories: Trees, Grass, Flooded vegetation, and Crops, with 100 candidates per category.
+The reproducible project references:
 
-The model produced predictions for 394 points; 6 points fell on NoData pixels. The resulting predictions are exploratory only. Dynamic World categories do not map directly to the project's five land-cover classes, and the candidate labels have not been independently verified as ground truth. Therefore, this comparison is not reported as an accuracy assessment.
+```text
+outputs/classification/land_cover_baseline.tif
+outputs/classification/land_cover_extra_trees.tif
+outputs/training_indices/ndwi.tif
+data/aoi/study_area.geojson
+data/aoi/training_samples_v2.gpkg
+```
 
-The analysis is intended to help identify areas for further inspection and potential reference-data collection.
+The QGIS project includes a final land-cover map layout with the five classification classes.
 
-## Visual Results
+The original QGIS project and local backup files are not required for reproducing the committed project.
 
-### Land-cover classification
+---
 
-![Land-cover classification map](outputs/figures/land_cover_classification.png)
+# Project Structure
 
-The classification visualization displays the five mapped classes: vegetation, built-up, bare soil, water, and road. White gaps may represent unclassified or NoData pixels; their meaning should be confirmed against the classification raster before interpretation.
+```text
+satellite-land-cover-classification/
+│
+├── data/
+│   └── aoi/
+│       ├── study_area.geojson
+│       └── training_samples_v2.gpkg
+│
+├── notebooks/
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_spectral_indices.ipynb
+│   ├── 03_training_data_analysis.ipynb
+│   ├── 04_model_evaluation.ipynb
+│   ├── 05_classification_visualization.ipynb
+│   └── 06_aoi_transfer_test.ipynb
+│
+├── outputs/
+│   ├── classification/
+│   │   ├── land_cover_baseline.tif
+│   │   └── land_cover_extra_trees.tif
+│   ├── figures/
+│   ├── reports/
+│   └── training_indices/
+│       └── ndwi.tif
+│
+├── src/
+│   ├── evaluation/
+│   └── visualization/
+│
+├── satellite_land_cover_reproducible.qgz
+├── requirements.txt
+└── README.md
+```
 
-### Training sample distribution
+Some generated or experimental files are intentionally excluded from the reproducible core workflow.
 
-![Training sample distribution](outputs/figures/training_sample_distribution.png)
+---
 
-The training-sample map shows the geographic distribution of the 39 labelled samples used in the current workflow. The limited sample size and uneven distribution across classes are important considerations when interpreting the model results.
+# Notebooks
 
-## Installation
+The analysis is organized into six notebooks.
 
-### Prerequisites
+| Notebook | Purpose |
+|---|---|
+| `01_data_exploration.ipynb` | Explore Sentinel-2 data, AOI, bands, and raster properties |
+| `02_spectral_indices.ipynb` | Calculate and inspect NDVI, NDWI, and NDBI |
+| `03_training_data_analysis.ipynb` | Inspect and analyse labelled training samples |
+| `04_model_evaluation.ipynb` | Compare and evaluate machine-learning models |
+| `05_classification_visualization.ipynb` | Visualize classification results and model outputs |
+| `06_aoi_transfer_test.ipynb` | Examine model behaviour for spatial/AOI transfer |
 
-- Python 3.10 or a compatible Python version supported by the selected package releases.
-- Git, if cloning the repository.
-- QGIS, if you want to inspect the raster outputs and project visually.
-- Sentinel-2 input data and the required training samples.
+---
 
-### 1. Clone the repository
+# Source Code
+
+The project also contains reusable evaluation and visualization utilities.
+
+Important components include:
+
+```text
+src/evaluation/
+├── spatial_cross_validation.py
+├── spatial_cross_validation_2_groups.py
+└── plot_training_point_distribution.py
+
+src/visualization/
+├── create_final_map.py
+└── create_final_report.py
+```
+
+The spatial-validation code explicitly records skipped folds and missing training classes instead of silently dropping problematic results.
+
+---
+
+# Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Main programming language |
+| NumPy | Numerical computation |
+| Pandas | Data preparation and analysis |
+| Rasterio | Raster processing and GeoTIFF operations |
+| GeoPandas | Vector geospatial processing |
+| Shapely | Geometry operations |
+| PyProj | CRS transformations |
+| Matplotlib | Visualization |
+| Scikit-learn | Machine-learning models and evaluation |
+| Joblib | Model serialization |
+| Jupyter | Interactive analysis |
+| QGIS | Geospatial visualization and map production |
+
+---
+
+# Reproducibility
+
+The committed workflow separates analysis notebooks, source code, data, and generated outputs.
+
+The QGIS project uses relative paths for its committed local dependencies rather than user-specific Windows paths.
+
+The repository also includes the small raster dependency:
+
+```text
+outputs/training_indices/ndwi.tif
+```
+
+so that the reproducible QGIS project does not depend on an ignored local NDWI file.
+
+Large raw Sentinel-2 source imagery is not included in the repository.
+
+To reproduce the complete processing workflow, the required Sentinel-2 input data must be obtained separately and placed in the expected project locations.
+
+---
+
+# Installation
+
+## Requirements
+
+- Python 3.10+ compatible environment
+- Git
+- QGIS for geospatial visualization
+- Required Sentinel-2 source imagery for rerunning the complete preprocessing workflow
+
+## Clone the repository
 
 ```powershell
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/Rudrapratapsinh-Chauhan1507/satellite-land-cover-classification.git
 cd satellite-land-cover-classification
 ```
 
-Replace the placeholder with your actual repository URL.
+## Create a virtual environment
 
-### 2. Create a virtual environment
-
-On Windows PowerShell:
+Windows PowerShell:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
-
-Ensure `requirements.txt` includes the project's direct dependencies, including scikit-learn and joblib.
+## Install dependencies
 
 ```powershell
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Prepare input data
+The exact execution order of individual processing scripts may depend on the availability and location of the source Sentinel-2 imagery and generated intermediate data.
 
-Place the required study-area file, training samples, and Sentinel-2 imagery in the expected project directories. Confirm that the filenames and raster grids match the paths expected by the scripts.
+For the documented analysis, the notebooks provide the clearest record of the executed workflow.
 
-## Outputs
+---
 
-The current workflow generates or uses the following artifacts:
+# Outputs
 
-| Artifact | Location |
+Important project outputs include:
+
+| Output | Location |
 |---|---|
-| Labelled training samples | `data/aoi/training_samples_v2.gpkg` |
-| Extracted training dataset | `outputs/training_dataset.csv` |
-| Whole-image spectral feature matrix | `outputs/training/spectral_features.npz` |
-| Whole-image valid-pixel mask | `outputs/training/valid_pixel_mask.tif` |
-| Random Forest baseline model | `outputs/models/random_forest_baseline.joblib` |
-| Baseline land-cover map | `outputs/classification/land_cover_baseline.tif` |
-| Classification visualization | `outputs/figures/land_cover_classification.png` |
-| Training sample distribution | `outputs/figures/training_sample_distribution.png` |
-| Classification map comparison | `outputs/reports/classification_map_comparison.csv` |
-| Spatial cross-validation results | `outputs/reports/spatial_cross_validation_folds.csv` |
+| Study area | `data/aoi/study_area.geojson` |
+| Training samples | `data/aoi/training_samples_v2.gpkg` |
+| Training dataset | `outputs/training_dataset.csv` |
+| Random Forest baseline | `outputs/classification/land_cover_baseline.tif` |
+| Extra Trees classification | `outputs/classification/land_cover_extra_trees.tif` |
+| NDWI raster | `outputs/training_indices/ndwi.tif` |
+| Classification figures | `outputs/figures/` |
+| Evaluation reports | `outputs/reports/` |
+| Reproducible QGIS project | `satellite_land_cover_reproducible.qgz` |
 
-The classification raster is a georeferenced GeoTIFF with a 10-metre pixel resolution and EPSG:32642 CRS.
-The classification map comparison report summarizes predicted pixel counts for each class across the Random Forest and Extra Trees maps. The spatial cross-validation report records fold-level performance and missing classes. These spatial validation results are exploratory because some folds lack classes in their training or test sets; they should not be interpreted as definitive accuracy estimates.
+---
 
-## Limitations and Future Improvements
+# Limitations
 
-The current project provides a working baseline pipeline, but several improvements are needed before the results can be considered robust.
+The current project is a complete experimental workflow, but it is **not a production-grade or independently validated land-cover mapping system**.
 
-- **Increase training data:** Collect more labelled samples for each class, particularly bare soil and water where sample counts are limited.
-- **Improve validation:** Use spatially separated validation samples and, where possible, an independent test dataset.
-- **Assess class confusion:** Investigate the spectral similarity between built-up and bare-soil surfaces.
-- **Compare models fairly:** Evaluate Random Forest and Extra Trees using consistent data splits and metrics.
-- **Validate the final map:** Inspect classification patterns and errors against suitable reference data and high-resolution imagery.
-- **Improve reproducibility:** Document the data sources, processing settings, feature definitions, model parameters, and software versions.
-- **Improve cartography:** Produce a final map with a legend, scale bar, north arrow, study-area boundary, and supporting class-area statistics.
-- **Streamline execution:** Document a reliable end-to-end workflow so the project can be reproduced without manually guessing the execution order.
+### 1. Small labelled dataset
 
-## Responsible Interpretation
+The original labelled dataset contained only 39 samples, with 33 valid samples remaining after cleaning.
 
-The output is a model-generated land-cover classification, not an authoritative land-use map. Classification errors can result from mixed pixels, shadows, seasonal variation, spectral similarity, cloud contamination, and limited training samples. The map should be used with appropriate validation and uncertainty considerations.
+This is very small for a five-class satellite classification problem.
 
-## Author
+### 2. Spatial sampling imbalance
+
+The samples are not evenly distributed geographically.
+
+All six original water samples were concentrated in one spatial group, causing one spatial-validation fold to lack water in its training partition.
+
+### 3. Spatial performance instability
+
+Spatial validation produced substantially different results across geographic folds.
+
+This indicates that the current model's performance is sensitive to where the training and validation samples are located.
+
+### 4. No independent ground-truth benchmark
+
+The current metrics should not be interpreted as independently verified accuracy for the entire satellite scene.
+
+### 5. Mixed pixels and spectral similarity
+
+At 10 m resolution, individual pixels can contain mixtures of land-cover types.
+
+Built-up surfaces and bare soil can also have similar spectral responses, making them difficult to separate reliably with a small training dataset.
+
+### 6. Scene-specific analysis
+
+The current workflow is based on a specific Sentinel-2 acquisition and study area. Performance may change across different dates, seasons, geographic regions, atmospheric conditions, and land-cover distributions.
+
+---
+
+# Future Improvements
+
+The most valuable next improvements would be:
+
+1. **Collect substantially more labelled samples**
+2. **Improve geographic coverage of the training data**
+3. **Create an independently verified test dataset**
+4. **Increase the number of samples for water and bare-soil classes**
+5. **Perform consistent model comparison using identical spatial splits**
+6. **Investigate class-specific confusion and spectral separability**
+7. **Test the workflow across additional Sentinel-2 acquisition dates**
+8. **Evaluate transferability to a second geographic AOI**
+9. **Add uncertainty/confidence analysis for the final map**
+10. **Validate classification results against reliable reference data**
+
+The priority should be **better reference data and spatial validation**, rather than simply adding more complex machine-learning algorithms.
+
+---
+
+# Responsible Interpretation
+
+This output is a **model-generated land-cover classification**, not an authoritative land-use or land-cover map.
+
+Potential sources of error include:
+
+- Limited training samples
+- Spatial sampling bias
+- Mixed pixels
+- Spectral similarity between classes
+- Shadows
+- Seasonal variation
+- Atmospheric/cloud effects
+- Differences between training and prediction regions
+
+The classification should therefore be interpreted together with its validation results and known dataset limitations.
+
+---
+
+# Project Outcome
+
+This project demonstrates an end-to-end application of:
+
+**Remote Sensing + Machine Learning + Geospatial Processing + Spatial Validation + QGIS**
+
+The main technical lesson from the project is that a high conventional validation score does not necessarily imply strong geographic generalization. The spatial cross-validation experiment exposed weaknesses in the current training-data distribution and provided a more realistic view of the model's limitations.
+
+---
+
+# Author
 
 **Rudrapratapsinh Chauhan**
 
 B.E. in Information Technology
 
-Areas of interest: Machine Learning, Remote Sensing, Geospatial Analysis, and AI Engineering.
+Interests:
 
-## License
+- Machine Learning
+- Remote Sensing
+- Geospatial Analysis
+- AI Engineering
 
-Choose and add an appropriate open-source license before publicly distributing the repository. Also verify the licensing and redistribution terms of the satellite imagery and other external datasets used in the project.
+---
+
+## License and Data
+
+Before adding a formal open-source license, verify the licensing and redistribution terms of all external datasets and satellite imagery used in the project.
+
+The repository does not redistribute the original raw Sentinel-2 imagery.
