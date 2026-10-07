@@ -211,6 +211,23 @@ The cross-validation confusion matrix shows that built-up and bare-soil samples 
 
 **Evaluation limitation:** These metrics are preliminary. They are based on only 39 labelled samples and three-fold stratified cross-validation. They should not be interpreted as independently verified accuracy for the entire classification map. Spatially independent validation and a larger, more representative dataset are needed for a stronger assessment.
 
+### Spatial Cross-Validation
+
+Spatial cross-validation was explored using four geographically grouped folds to investigate how model performance changes when validation samples are separated spatially.
+
+| Fold | Training samples | Validation samples | Accuracy | Macro F1-score | Status |
+|---|---:|---:|---:|---:|---|
+| 1 | 27 | 12 | 0.9167 | 0.5714 | Evaluated |
+| 2 | 28 | 11 | — | — | Skipped: water class missing from training data |
+| 3 | 30 | 9 | 0.4444 | 0.1600 | Evaluated |
+| 4 | 32 | 7 | 1.0000 | 0.6000 | Evaluated |
+
+Across the three evaluated folds, the mean accuracy was 0.7870 (78.70%) and the mean macro F1-score was 0.4438. These means exclude the skipped fold and should not be interpreted as complete four-fold cross-validation results.
+
+**Important limitations:** The dataset contains only 39 labelled samples, and the spatial groups have an uneven distribution of land-cover classes. All six water samples fall within one spatial group, preventing the model from being trained on water samples in one of the validation splits. Some evaluated folds also lack certain classes in their validation samples. Consequently, these results are exploratory diagnostics, not reliable estimates of generalization performance or independently verified classification-map accuracy.
+
+The spatial-validation results should be interpreted alongside the stratified cross-validation results, keeping the two evaluation methods distinct. Future evaluation would benefit from more geographically representative, independently verified reference samples.
+
 ### Exploratory Dynamic World Comparison
 
 A set of 400 candidate points derived from Dynamic World labels was used for exploratory comparison with the Extra Trees classification map. The points represent four Dynamic World categories: Trees, Grass, Flooded vegetation, and Crops, with 100 candidates per category.

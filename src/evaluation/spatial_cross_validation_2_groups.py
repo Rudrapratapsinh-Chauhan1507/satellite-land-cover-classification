@@ -18,7 +18,7 @@ from src.utils.paths import TRAINING_SAMPLES_FILE, TRAINING_DATASET_FILE
 # 1. Configuration
 # --------------------------------------------------
 
-N_SPATIAL_GROUPS = 4
+N_SPATIAL_GROUPS = 2
 RANDOM_STATE = 42
 
 OUTPUT_DIR = Path("outputs/reports")
@@ -261,7 +261,7 @@ if not fold_results:
 
 results = pd.DataFrame(fold_results)
 
-results_path = OUTPUT_DIR / "spatial_cv_fold_metrics.csv"
+results_path = OUTPUT_DIR / "spatial_cv_2_group_comparison.csv"
 results.to_csv(results_path, index=False)
 
 evaluated = results[results["status"] == "evaluated"]
