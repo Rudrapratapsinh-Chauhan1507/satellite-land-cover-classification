@@ -1,0 +1,10 @@
+# SentinelScope — Streamlit requirements
+# Install with:  pip install -r requirements-streamlit.txt
+
+streamlit>=1.35.0
+rasterio>=1.3.0
+numpy>=1.24.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+scikit-learn==1.9.1  # must match version used to train the Extra Trees model
+joblib>=1.3.0

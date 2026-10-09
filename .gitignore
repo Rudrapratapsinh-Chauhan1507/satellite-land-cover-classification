@@ -60,3 +60,8 @@ outputs/reports/training_samples_inspection.gpkg
 
 # Local QGIS helper project
 data/aoi/QGIS_SAMPLE.qgz
+
+# Temporary Streamlit test data
+temp/
+# Local QGIS backup project
+satellite_land_cover_backup.qgz
