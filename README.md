@@ -45,6 +45,50 @@ The final workflow is designed as an **experimental/research classification pipe
 - ⚠️ Explicit analysis of spatial-validation limitations
 
 ---
+## Streamlit Land-Cover Classification App
+
+The project includes a Streamlit application for running land-cover inference on multispectral satellite imagery using a trained Extra Trees classifier.
+
+### Features
+
+- Upload multispectral Sentinel-2 GeoTIFF imagery.
+- Generate predictions for five land-cover classes: Vegetation, Built-up, Bare soil, Water, and Road.
+- View the predicted class distribution and pixel statistics.
+- Export the classification raster as a GeoTIFF for further geospatial analysis.
+
+### Installation and Launch
+
+Create and activate a Python virtual environment, then install the app dependencies:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements-streamlit.txt
+```
+
+Launch the application:
+
+```powershell
+streamlit run app.py
+```
+
+Streamlit will display a local URL in the terminal. Open that URL in your browser to use the application.
+
+### Input Data Requirements
+
+The app requires multispectral GeoTIFF data containing the following ten Sentinel-2 bands:
+
+`B02, B03, B04, B05, B06, B07, B08, B8A, B11, B12`
+
+For a multiband GeoTIFF, the bands must be in this exact order and aligned to a common grid. Alternatively, upload the individual band GeoTIFFs supported by the application.
+
+Ordinary RGB images, screenshots, JPG files, and PNG files do not contain the required multispectral information and are not valid model inputs.
+
+### Model and Interpretation
+
+The Streamlit app loads the committed Extra Trees candidate model from `outputs/models/extra_trees_candidate.joblib`. The Random Forest classifier remains part of the project's baseline training and evaluation workflow.
+
+The application generates model predictions; it does not independently verify the true land cover. Classification results should therefore be treated as exploratory until validated against independent, representative ground-truth samples.
 
 ## Study Area and Data
 
@@ -371,6 +415,15 @@ satellite-land-cover-classification/
 │   ├── evaluation/
 │   └── visualization/
 │
+├── app.py
+├── requirements-streamlit.txt
+├── src/
+│   └── inference/
+│       ├── __init__.py
+│       └── predict.py
+├── tests/
+│   ├── test_upgrade.py
+│   └── test_real_data.py
 ├── satellite_land_cover_reproducible.qgz
 ├── requirements.txt
 └── README.md
@@ -432,6 +485,8 @@ The spatial-validation code explicitly records skipped folds and missing trainin
 | Joblib | Model serialization |
 | Jupyter | Interactive analysis |
 | QGIS | Geospatial visualization and map production |
+| Streamlit | Interactive web application for satellite classification |
+| Extra Trees | Classification model used by the Streamlit inference app |
 
 ---
 
@@ -507,6 +562,9 @@ Important project outputs include:
 | NDWI raster | `outputs/training_indices/ndwi.tif` |
 | Classification figures | `outputs/figures/` |
 | Evaluation reports | `outputs/reports/` |
+| Streamlit app | `app.py` |
+| Streamlit dependencies | `requirements-streamlit.txt` |
+| Extra Trees inference model | `outputs/models/extra_trees_candidate.joblib` |
 | Reproducible QGIS project | `satellite_land_cover_reproducible.qgz` |
 
 ---
